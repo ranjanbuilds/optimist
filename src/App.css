@@ -2,9 +2,13 @@
   background: #C0F8D1;
   height: 100vh;
   display: grid;
-  grid-template-columns: 3fr 4fr 3fr;
+  grid-template-columns: 2fr 6fr 2fr;
   grid-gap: 5px;
   grid-template-rows: 1fr 4fr 2fr;
+}
+
+.hide {
+  display: none;
 }
 
 .Goals,
@@ -29,7 +33,7 @@ ol input {
   border: none;
   border-bottom: 1px solid lightgray;
   font-size: 12px;
-  width: 90%;
+  width: 100%;
 }
 
 ol li:hover {
@@ -42,6 +46,30 @@ input:focus {
 
 li {
   margin-bottom: 25px;
+}
+
+ol li form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  /* grid-column-gap: 10px; */
+  grid-gap: 15px;
+}
+
+ol li form input[name="goal"] {
+  grid-column: 1/4;
+}
+
+ol li form input[type="submit"] {
+  border: 1px solid lightgray;
+  background: white;
+  padding: none;
+  width: 55px;
+}
+
+ol li form button {
+  width: 25px;
+  padding: 0;
 }
 
 li:last-child {
