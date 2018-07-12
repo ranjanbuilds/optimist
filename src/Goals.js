@@ -4,9 +4,13 @@ class Goals extends React.Component {
 
     render() {
         return (
-            <div className="Dashboard">
-                <p>Gooooooaaalllllllllll</p>
-            </div>
+            <div className="optimistApp">
+                <div className="Goals">
+                    <ol>
+                        <li><input type="text"/></li>
+                    </ol>
+                </div>
+            </div> 
         );
     }
 }

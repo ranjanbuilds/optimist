@@ -6,7 +6,7 @@ class Dashboard extends React.Component {
     return (
         <div className="Dashboard">
             <ul>
-                <li>Goals</li>
+                <li><a href="/goals">Goals</a></li>  
                 <li>Check-In</li>
                 <li>Today</li>
                 <li>Yesterdays</li>
