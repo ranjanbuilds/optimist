@@ -74,12 +74,7 @@ ol li form input[type="submit"] {
   border: 1px solid lightgray;
   background: white;
   padding: none;
-  width: 55px;
-}
-
-ol li form button {
   width: 25px;
-  padding: 0;
 }
 
 li:last-child {

@@ -13,14 +13,21 @@ class Goals extends React.Component {
             }
         }
         // This binding is necessary to make `this` work in the callback
-        this.handleClick = this.handleClick.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleClick(e){
-        let goalNumber = e.target.dataset.goal;
-        let relatedNick = document.getElementsByClassName(`nickNameContainer${goalNumber}`);
-        relatedNick[0].classList.remove("hide")
+    handleEdit() {
+        let open = true;
+
+        this.setState({
+            goals: {
+                goal_1: {
+                    ...this.state.goals.goal_1,
+                    open
+                }
+            }
+        });
     }
 
     handleSubmit(e){
@@ -46,15 +53,14 @@ class Goals extends React.Component {
         if(open) {
             goalOneInput = 
                 <form onSubmit={this.handleSubmit}>
-                    <input ref="_goal1" type="text" name="goal" placeholder="enter your goal, mother fucker!"/>
-                    <button type="button" className="goal1" data-goal='1' onClick={this.handleClick}>+</button>
-                    <div className="nickNameContainer nickNameContainer1 hide">
-                        <input ref="_nickName1" type="text" name="goalNickname" className="nickName nickName1" placeholder="nickname plz"/>
-                        <input type="submit" value="done!"/>
+                    <input ref="_goal1" type="text" name="goal" placeholder="enter your goal, mother fucker!" value={goal}/>
+                    <div className="nickNameContainer nickNameContainer1">
+                        <input ref="_nickName1" type="text" name="goalNickname" className="nickName nickName1" placeholder="nickname plz" value={nickname}/>
+                        <input type="submit" value="✓"/>
                     </div>
                 </form>;
         } else {
-            goalOneSummary = <div>{goal}</div>; 
+            goalOneSummary = <div className="goalSummary">{goal}<button onClick={this.handleEdit}>Edit</button></div>; 
         }
 
         return (
