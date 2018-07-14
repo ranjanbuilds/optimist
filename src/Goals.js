@@ -6,14 +6,15 @@ class Goals extends React.Component {
         this.state = {
             goals: {
                 goal_1: {
-                    goal: null,
-                    nickname: null,
+                    goal: "",
+                    nickname: "",
                     open: true
                 }
             }
         }
         // This binding is necessary to make `this` work in the callback
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -30,6 +31,33 @@ class Goals extends React.Component {
         });
     }
 
+    handleChange(e) {
+        let name = e.target.name;
+        let goal_1;
+        
+        if(name == "goalNickname") {
+            let nickname = e.target.value;
+
+            goal_1 = {
+                ...this.state.goals.goal_1,
+                nickname
+            } 
+        } else {
+            let goal = e.target.value;
+
+            goal_1 = {
+                ...this.state.goals.goal_1,
+                goal
+            } 
+        }
+
+        this.setState({
+            goals: {
+                goal_1
+            }
+        });
+    }
+
     handleSubmit(e){
         e.preventDefault();
         const { _goal1, _nickName1 } = this.refs;
@@ -42,7 +70,6 @@ class Goals extends React.Component {
                 }
             }
         });
-        
     }
     
     render() {
@@ -53,9 +80,24 @@ class Goals extends React.Component {
         if(open) {
             goalOneInput = 
                 <form onSubmit={this.handleSubmit}>
-                    <input ref="_goal1" type="text" name="goal" placeholder="enter your goal, mother fucker!" value={goal}/>
+                    <input 
+                        ref="_goal1" 
+                        type="text" 
+                        name="goal" 
+                        placeholder="enter your goal, mother fucker!"
+                        value={goal}
+                        onChange={this.handleChange}
+                    />
                     <div className="nickNameContainer nickNameContainer1">
-                        <input ref="_nickName1" type="text" name="goalNickname" className="nickName nickName1" placeholder="nickname plz" value={nickname}/>
+                        <input 
+                            ref="_nickName1" 
+                            type="text" 
+                            name="goalNickname" 
+                            className="nickName nickName1" 
+                            placeholder="nickname plz" 
+                            value={nickname}
+                            onChange={this.handleChange}
+                        />
                         <input type="submit" value="✓"/>
                     </div>
                 </form>;
