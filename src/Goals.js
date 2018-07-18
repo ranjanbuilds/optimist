@@ -1,4 +1,5 @@
 import React from "react";
+import update from 'immutability-helper';
 
 class Goals extends React.Component {
     constructor(props) {
@@ -33,29 +34,28 @@ class Goals extends React.Component {
     }
 
     handleChange(e) {
+        let index = parseInt(e.target.dataset.goal);
         let name = e.target.name;
-        let goal_1;
+        let thisGoal;
         
         if(name == "goalNickname") {
             let nickname = e.target.value;
 
-            goal_1 = {
-                ...this.state.goals[0],
+            thisGoal = {
+                ...this.state.goals[index],
                 nickname
             } 
         } else {
             let goal = e.target.value;
 
-            goal_1 = {
-                ...this.state.goals[0],
+            thisGoal = {
+                ...this.state.goals[index],
                 goal
             } 
         }
-
+        // Is there a way to do this without updating the state continously?
         this.setState({
-            goals: [
-                goal_1
-            ]
+            goals: update(this.state.goals, {[index]: {$set: thisGoal}})
         });
     }
 
@@ -75,15 +75,21 @@ class Goals extends React.Component {
 
     handleSubmit(e){
         e.preventDefault();
-        const { _goal1, _nickName1 } = this.refs;
+        // target is the form - targeting first input
+        let index = parseInt(e.target[0].dataset.goal);
+
+        // getting the value using refs *shrug*
+        let goal = this.refs[`_goal${index}`].value;
+        let nickname = this.refs[`_nickname${index}`].value;
+
+        let thisGoal = {
+            goal,
+            nickname,
+            open: false
+        }
+
         this.setState({
-            goals: [
-                { 
-                    goal: _goal1.value,
-                    nickname: _nickName1.value,
-                    open: false
-                }
-            ]
+            goals: update(this.state.goals, {[index]: {$set: thisGoal}})
         });
     }
     
@@ -93,36 +99,51 @@ class Goals extends React.Component {
             <div className="optimistApp">
                 <div className="Goals">
                     <ol>
-                        {this.state.goals.map((goal, i) => 
-                            <li key={i}>
-                                <form onSubmit={this.handleSubmit}>
-                                    <input 
-                                        ref={`_goal${i}`}
-                                        type="text" 
-                                        name="goal" 
-                                        placeholder="enter your goal, mother fucker!"
-                                        value={goal.goal}
-                                        onChange={this.handleChange}
-                                    />
-                                    <div className="nickNameContainer nickNameContainer1">
+                        {this.state.goals.map((thisGoal, i) => {
+                            let {goal, nickname, open} = thisGoal;
+                            let display;
+                            if(open) {
+                                display = 
+                                    <form onSubmit={this.handleSubmit}>
                                         <input 
-                                            ref={`_nickName${i}`} 
+                                            ref={`_goal${i}`}
+                                            data-goal={i}
                                             type="text" 
-                                            name="goalNickname" 
-                                            className="nickName nickName1" 
-                                            placeholder="nickname plz" 
-                                            value={goal.nickname}
+                                            name="goal" 
+                                            placeholder="enter your goal, mother fucker!"
+                                            value={goal}
                                             onChange={this.handleChange}
                                         />
-                                        <input type="submit" value="✓"/>
+                                        <div className="nicknameContainer">
+                                            <input 
+                                                ref={`_nickname${i}`}
+                                                data-goal={i} 
+                                                type="text" 
+                                                name="goalNickname" 
+                                                className="nickname" 
+                                                placeholder="nickname plz" 
+                                                value={nickname}
+                                                onChange={this.handleChange}
+                                            />
+                                            <input type="submit" value="✓"/>
+                                        </div>
+                                    </form>
+                                    
+                            } else {
+                                display =
+                                    <div className="goalSummary">{goal}
+                                        <button onClick={this.handleEdit}>Edit</button>
                                     </div>
-                                </form>
+                            }
 
-                                <div className="goalSummary">{goal.goal}
-                                    <button onClick={this.handleEdit}>Edit</button>
-                                </div>
-                            </li>
-                        )}
+                            let finalDisplay = 
+                                <li key={i}>
+                                    {display}
+                                </li>
+
+                            return finalDisplay;
+
+                        })}
                     </ol>
                     <button onClick={this.handleAddGoal}>add goal</button>
                 </div>

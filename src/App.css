@@ -11,7 +11,7 @@
   font-weight: 600;
 }
 
-.nickNameContainer.hide {
+.nicknameContainer.hide {
   display: none;
 }
 
@@ -63,7 +63,7 @@ ol li form input[name="goal"] {
   grid-column: 1/4;
 }
 
-.nickNameContainer {
+.nicknameContainer {
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-column: 1/3;
