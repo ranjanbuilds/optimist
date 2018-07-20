@@ -18,18 +18,22 @@ class Goals extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddGoal = this.handleAddGoal.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+    }
+    // I can probably just send this index number, instead of using data attributes
+    handleDelete(e) {
+        let index = parseInt(e.target.dataset.goal);
+    
+        this.setState({
+            goals: update(this.state.goals, { $splice: [[index, 1]] })
+        });
     }
 
-    handleEdit() {
-        let open = true;
+    handleEdit(e) {
+        let index = parseInt(e.target.dataset.goal);
 
         this.setState({
-            goals: [
-                {
-                    ...this.state.goals[0],
-                    open
-                }
-            ]
+            goals: update(this.state.goals, { [index]: { open: {$set: true} } })
         });
     }
 
@@ -126,13 +130,16 @@ class Goals extends React.Component {
                                                 onChange={this.handleChange}
                                             />
                                             <input type="submit" value="✓"/>
+                                            <button data-goal={i} onClick={this.handleDelete}>Delete</button>
                                         </div>
                                     </form>
                                     
                             } else {
                                 display =
-                                    <div className="goalSummary">{goal}
-                                        <button onClick={this.handleEdit}>Edit</button>
+                                    <div className="goalSummary">
+                                        {goal}
+                                        <button data-goal={i} onClick={this.handleEdit}>Edit</button>
+                                        <button data-goal={i} onClick={this.handleDelete}>Delete</button>
                                     </div>
                             }
 
