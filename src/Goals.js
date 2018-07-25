@@ -1,5 +1,6 @@
 import React from "react";
 import update from 'immutability-helper';
+import EditGoal from './EditGoal';
 
 class Goals extends React.Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class Goals extends React.Component {
         this.handleAddGoal = this.handleAddGoal.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
+
     // I can probably just send this index number, instead of using data attributes
     handleDelete(e) {
         let index = parseInt(e.target.dataset.goal);
@@ -37,26 +39,15 @@ class Goals extends React.Component {
         });
     }
 
-    handleChange(e) {
-        let index = parseInt(e.target.dataset.goal);
-        let name = e.target.name;
+    handleChange(index, name, e) {
         let thisGoal;
+        let fieldValue = e.target.value;
         
-        if(name == "goalNickname") {
-            let nickname = e.target.value;
-
-            thisGoal = {
-                ...this.state.goals[index],
-                nickname
-            } 
-        } else {
-            let goal = e.target.value;
-
-            thisGoal = {
-                ...this.state.goals[index],
-                goal
-            } 
-        }
+        thisGoal = {
+            ...this.state.goals[index],
+            [name]: fieldValue
+        } 
+       
         // Is there a way to do this without updating the state continously?
         this.setState({
             goals: update(this.state.goals, {[index]: {$set: thisGoal}})
@@ -107,32 +98,7 @@ class Goals extends React.Component {
                             let {goal, nickname, open} = thisGoal;
                             let display;
                             if(open) {
-                                display = 
-                                    <form onSubmit={this.handleSubmit}>
-                                        <input 
-                                            ref={`_goal${i}`}
-                                            data-goal={i}
-                                            type="text" 
-                                            name="goal" 
-                                            placeholder="enter your goal, mother fucker!"
-                                            value={goal}
-                                            onChange={this.handleChange}
-                                        />
-                                        <div className="nicknameContainer">
-                                            <input 
-                                                ref={`_nickname${i}`}
-                                                data-goal={i} 
-                                                type="text" 
-                                                name="goalNickname" 
-                                                className="nickname" 
-                                                placeholder="nickname plz" 
-                                                value={nickname}
-                                                onChange={this.handleChange}
-                                            />
-                                            <input type="submit" value="✓"/>
-                                            <button data-goal={i} onClick={this.handleDelete}>Delete</button>
-                                        </div>
-                                    </form>
+                                display = <EditGoal goal={goal} i={i} nickname={nickname} handleChange={(i, name, e) => this.handleChange(i, name, e)}/>
                                     
                             } else {
                                 display =
@@ -169,30 +135,21 @@ Goals.defaultProps = {
 
 export default Goals;
 
+// break this component down into smaller, reusable pieces
+// get less working and clean up the css
 
-// how do I loop over something in the stache? 
-    // this.props.items.map((ingredient, i) =>
-    //     React.createElement("li", { key: i }, ingredient)
-    // ) // but this isn't using jsx 
+/*
+    validating properties: 
 
-    // <ul>
-    //     {this.props.ingredients.map((ingredient, i) => 
-    //         <li key={i}>{ingredient}</li>
-    //     )}
-    // </ul>
+    propTypes: {
+        ingredients: PropTypes.array
+        title: PropTypes.string
+    }
 
-// binding this to all the event handlers?
-// creating small, stateless components to handle things
-// simpilar way to modify state?
+    default props
 
-// higher order functions
+    custom property validation
 
-//     - currying
-//     - recursion -> used instead of loops but not optimal for all js engines
-//     - composition -> chaining small, pure functions
+    class static properties
+*/ 
 
-// react components 
-
-//     - react.createClass({}) or class componentName extends React.Component
-//     - stateless components are just functions that take properties and return dom elements, no functionality
-//         - const componentName = ({items}) =>z 
