@@ -23,9 +23,7 @@ class Goals extends React.Component {
     }
 
     // I can probably just send this index number, instead of using data attributes
-    handleDelete(e) {
-        let index = parseInt(e.target.dataset.goal);
-    
+    handleDelete(index) {
         this.setState({
             goals: update(this.state.goals, { $splice: [[index, 1]] })
         });
@@ -98,7 +96,9 @@ class Goals extends React.Component {
                             let {goal, nickname, open} = thisGoal;
                             let display;
                             if(open) {
-                                display = <EditGoal goal={goal} i={i} nickname={nickname} handleChange={(i, name, e) => this.handleChange(i, name, e)}/>
+                                display = <EditGoal goal={goal} i={i} nickname={nickname} 
+                                                    handleChange={(i, name, e) => this.handleChange(i, name, e)} 
+                                                    handleDelete={(i) => this.handleDelete(i)}/>
                                     
                             } else {
                                 display =

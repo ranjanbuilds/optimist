@@ -31,7 +31,10 @@ class EditGoal extends React.Component {
                         onChange={(e) => { this.props.handleChange(i, 'nickname', e) }}
                     />
                     <input type="submit" value="✓" />
-                    <button data-goal={i} onClick={this.handleDelete}>Delete</button>
+                    <button data-goal={i} 
+                        onClick={() => { this.props.handleDelete(i) }}>
+                            Delete
+                    </button>
                 </div>
             </form>
         );
